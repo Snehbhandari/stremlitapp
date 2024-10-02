@@ -79,7 +79,7 @@ def sync_calendar_to_csv(service, calendar_ids, csv_file_path):
             continue
 
         for event in events:
-            event_id = event.get('id', 'No ID')
+            event_id = event.get('id')
             event_title = event.get('summary', 'No Title')
 
             # Use the start and end datetimes directly

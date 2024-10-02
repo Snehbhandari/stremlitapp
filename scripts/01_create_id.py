@@ -1,9 +1,11 @@
 import os
 import json
+import google.auth.exceptions
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from dotenv import load_dotenv
+import google_auth_oauthlib.flow
 
 # Load environment variables
 load_dotenv()
@@ -32,6 +34,18 @@ def get_calendar_ids(creds):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+def create_new_credentials():
+    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+        os.path.join(BASE_DIR, 'credentials.json'), SCOPES
+    )
+    creds = flow.run_local_server(port=0)  # Start the local server for the OAuth flow
+
+    # Save the credentials for future use
+    with open(os.path.join(BASE_DIR, 'token.json'), 'w') as token:
+        token.write(creds.to_json())
+
+    return creds
+
 def main():
     creds = None
     token_path = os.path.join(BASE_DIR, 'token.json')
@@ -42,8 +56,16 @@ def main():
 
     # Check if the credentials are valid
     if not creds or not creds.valid:
-        print("Credentials are not valid or expired.")
-        return
+        if creds and creds.expired and creds.refresh_token:
+            try:
+                creds.refresh(Request())
+                print("Credentials refreshed successfully.")
+            except google.auth.exceptions.RefreshError:
+                print("Credentials are expired and cannot be refreshed. Creating new credentials...")
+                creds = create_new_credentials()
+        else:
+            print("No valid credentials found. Creating new credentials...")
+            creds = create_new_credentials()
 
     # Get calendar IDs
     calendar_ids = get_calendar_ids(creds)
