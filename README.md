@@ -1,9 +1,9 @@
 # Calendar App 
 
-## To make it work 
+## Prerequisites 
 
-### Steps to Set Up OAuth2 Credentials and Download credentials.json
-Go to the Google Cloud Console:
+## Steps to Set Up OAuth2 Credentials and Download credentials.json
+### Go to the Google Cloud Console:
 - Navigate to the Google Cloud Console.
 ### Create a New Project or Select an Existing Project:
 - Use the project selector at the top of the page to select an existing project or create a new one.
@@ -18,3 +18,11 @@ Go to the Google Cloud Console:
 5. Click "Create" and download the credentials.json file.
 
 Make sure to save the credentials.json file in the base directory. 
+And rename the file as credentials.json 
+
+## To run the files:
+
+Run the following files in this sequence: 
+1. 01_create_id.py
+2. 02_google_auth.py 
+3. 03_google_cal_to_csv.py 
