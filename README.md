@@ -17,4 +17,4 @@ Go to the Google Cloud Console:
 4. After configuring the consent screen, choose "Desktop App" as the application type.
 5. Click "Create" and download the credentials.json file.
 
-Make sure to save the credentials.json file in the base directory.
+Make sure to save the credentials.json file in the base directory. 
