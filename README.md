@@ -17,7 +17,7 @@
 4. After configuring the consent screen, choose "Desktop App" as the application type.
 5. Click "Create" and download the credentials.json file.
 
-Make sure to save the credentials.json file in the base directory. 
+Make sure to save the file in the base directory. 
 And rename the file as credentials.json 
 
 ## To run the files:
