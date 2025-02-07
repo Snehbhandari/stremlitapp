@@ -8,6 +8,8 @@ from datetime import datetime, timedelta, timezone
 from dateutil import parser
 import traceback
 from datetime import datetime, timedelta
+import dotenv 
+
 
 # Define the scopes
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
@@ -33,8 +35,8 @@ def read_calendar_ids(file_path):
 
 def get_calendar_events(service, calendar_id):
     try:
-        # start_time = '2023-01-01T00:00:00Z'
-        # end_time = '2025-01-01T00:00:00Z'
+        # start_time = '2025-01-31T00:00:00Z'
+        # end_time = '2025-02-06T00:00:00Z'
 
         # Get today's date in the required format
         end_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -145,3 +147,7 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     main()
+    import os
+
+    print("Checking if token.json exists:", os.path.exists('token.json'))
+    print("Checking if calendars.json exists:", os.path.exists('calendars.json'))

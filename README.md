@@ -20,9 +20,13 @@
 Make sure to save the file in the base directory. 
 And rename the file as credentials.json 
 
+## Download all the requirements 
+
+
 ## To run the files:
 
-Run the following files in this sequence: 
-1. 01_create_id.py
-2. 02_google_auth.py 
-3. 03_google_cal_to_csv.py 
+The following files should be run: 
+- scripts/shell.rtf
+This will automatically fetch all the data for the past 1 week from your calendars and save it in a csv file. 
+
+
