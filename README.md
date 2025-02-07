@@ -27,6 +27,6 @@ And rename the file as credentials.json
 
 The following files should be run: 
 - scripts/shell.rtf
-This will automatically fetch all the data for the past 1 week from your calendars and save it in a csv file. 
+<br>This will automatically fetch all the data for the past 1 week from your calendars and save it in a csv file. 
 
 
