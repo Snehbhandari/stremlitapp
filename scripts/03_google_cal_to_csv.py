@@ -7,6 +7,7 @@ from google.oauth2.credentials import Credentials
 from datetime import datetime, timedelta, timezone
 from dateutil import parser
 import traceback
+from datetime import datetime, timedelta
 
 # Define the scopes
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
@@ -32,8 +33,15 @@ def read_calendar_ids(file_path):
 
 def get_calendar_events(service, calendar_id):
     try:
-        start_time = '2023-01-01T00:00:00Z'
-        end_time = '2025-01-01T00:00:00Z'
+        # start_time = '2023-01-01T00:00:00Z'
+        # end_time = '2025-01-01T00:00:00Z'
+
+        # Get today's date in the required format
+        end_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+
+        # Get the date one week ago
+        start_time = (datetime.utcnow() - timedelta(weeks=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
+
         
         events_result = service.events().list(calendarId=calendar_id, timeMin=start_time, timeMax=end_time, singleEvents=True, orderBy='startTime').execute()
         events = events_result.get('items', [])
