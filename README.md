@@ -50,7 +50,7 @@ To fetch calendar data and save it as a CSV file in the directory, run:
 python 03_google_cal_to_csv.py
 ```
 
-This will retrieve events from the last 7 days up to the current time and store them in a CSV file.
+This will retrieve events from the last 7 days up to the current time and store them in a CSV(calendar_events.csv) file in a subfolder data within the same directory. 
 
 ---
 
@@ -88,7 +88,8 @@ To automate the script execution on macOS, **LaunchD** is used. Follow these ste
    launchctl list | grep com.google.cal2csv
    ```
 
-   If successful, you should see output in three columns, indicating the job is running (e.g., `- 0 com.google.cal2csv`).
+   If successful, you should see output in three columns, indicating the job is running 
+   (e.g., `- 0 com.google.cal2csv`).
 
 ### 🖥️ For Windows Users
 
