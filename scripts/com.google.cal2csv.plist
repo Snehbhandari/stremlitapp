@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+
+<dict>
+    <key>Label</key>
+    <string>com.google.cal2csv</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>python</string> <!-- Add python location, on terminal type "which python" to get this.-->
+        <string>scripts/03_google_cal_to_csv.py</string> <!-- Add the path to the script. -->
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>stremlitapp</string> <!-- Working directory -->
+
+    <!-- run every day -->
+    <key>StartInterval</key>
+    <integer>86400</integer> <!-- You can change it to the time you want, stored in seconds. -->
+
+    <!-- This just does not run at the time, only runs at load. I wonder why. Probably its because 
+    the file is not running in the background and the task is not scheduled. --> 
+    <!-- <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>17</integer>
+        <key>Minute</key>
+        <integer>15</integer>
+    </dict> -->
+    
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- <key>KeepAlive</key>
+    <<true/>  
+    This keeps the script running every 10 seconds - not what I want.  -->
+    
+    <!-- error logging-->
+    <key>StandardOutPath</key>
+    <string>scripts/logs/calendar03out.log</string> <!-- Add the absolute path if this does not work -->
+    <key>StandardErrorPath</key>
+    <string>scripts/logs/calendar03error.log</string>
+</dict>
+</plist>
