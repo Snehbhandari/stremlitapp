@@ -3,6 +3,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from dotenv import load_dotenv
+from datetime import datetime 
 
 # Define the base directory for file paths
 load_dotenv()
@@ -34,6 +35,8 @@ def authenticate_google_account():
 def main():
     creds = authenticate_google_account()
     print("Authorization successful. The token.json file has been created.")
+    print(f"02_google_auth ran at {datetime.now()}")
+    print("#-------------------------------------------------#")
 
 if __name__ == '__main__':
     main()

@@ -9,6 +9,7 @@ from dateutil import parser
 import traceback
 from datetime import datetime, timedelta
 import dotenv 
+import os
 
 
 # Define the scopes
@@ -53,6 +54,8 @@ def get_calendar_events(service, calendar_id):
         print(f"An error occurred while fetching events: {e}")
         traceback.print_exc()  # Print full stack trace for debugging
         print(f"Calendar ID: {calendar_id}")
+        print("File ran at", datetime.now())
+        print("#----------------------#")
         return []
 
 def process_events(events):
@@ -144,10 +147,7 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-if __name__ == '__main__':
-    main()
-    import os
-
     print("Checking if token.json exists:", os.path.exists('token.json'))
     print("Checking if calendars.json exists:", os.path.exists('calendars.json'))
+    print("Ran at", datetime.now())
+    print("#----------------------#")

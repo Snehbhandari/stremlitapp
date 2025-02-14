@@ -6,6 +6,7 @@ from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from dotenv import load_dotenv
 import google_auth_oauthlib.flow
+from datetime import datetime 
 
 # Load environment variables
 load_dotenv()
@@ -74,6 +75,9 @@ def main():
         with open(os.path.join(BASE_DIR, 'calendars.json'), 'w') as f:
             json.dump(calendar_ids, f, indent=4)
         print(f"Calendar IDs have been saved to {os.path.join(BASE_DIR, 'calendars.json')}")
+    
+    print(f"01_create_id ran at {datetime.now()}")
 
 if __name__ == '__main__':
     main()
+    print("#-------------------------------------------------#")
