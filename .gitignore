@@ -5,3 +5,8 @@ token.json
 calendar_events.csv 
 cal 
 data 
+logs
+scripts/com.cal.caltocsv.plist
+scripts/com.cal.createid.plist
+scripts/com.cal.googleauth.plist 
+shell.sh
