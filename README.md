@@ -1,36 +1,120 @@
-# Calendar App 
+# 📅 Calendar Automation App
 
-## Prerequisites 
+## 🚀 Prerequisites
 
-## 1. Steps to Set Up OAuth2 Credentials and Download credentials.json
-### Go to the Google Cloud Console:
-- Navigate to the Google Cloud Console.
-### Create a New Project or Select an Existing Project:
-- Use the project selector at the top of the page to select an existing project or create a new one.
-### Enable the Google Calendar API:
-- Go to the "API & Services" > "Library" and search for "Google Calendar API".
-- Click on the Google Calendar API and then click "Enable".
-### Create OAuth 2.0 Client ID:
-1.  Go to "API & Services" > "Credentials".
-2. Click on "Create Credentials" and select "OAuth 2.0 Client ID".
-3. You will need to configure the consent screen if you haven't done so already. This involves filling out some basic information about your application.
-4. After configuring the consent screen, choose "Desktop App" as the application type.
-5. Click "Create" and download the credentials.json file.
+### 1️⃣ Setting Up OAuth 2.0 Credentials
 
-Make sure to save the file in the base directory. 
-And rename the file as credentials.json 
+Follow these steps to configure OAuth 2.0 credentials and download the necessary `credentials.json` file:
 
-## Download all the requirements 
+#### 🔹 Access Google Cloud Console:
+- Navigate to the [Google Cloud Console](https://console.cloud.google.com/).
 
-## 2. To run the files:
+#### 🔹 Create or Select a Project:
+- Use the project selector at the top of the page to either create a new project or select an existing one.
 
-The following files should be run to get/ update the credentials
-- 01_create_id.py
-- 02_google_auth.py
+#### 🔹 Enable the Google Calendar API:
+1. Navigate to **API & Services** > **Library**.
+2. Search for **Google Calendar API**.
+3. Click on **Google Calendar API** and select **Enable**.
 
-To get data from your calendars into a csv in your directory, run the following file 
-- 03_google_cal_to_csv.py
-\ This will save data from the last 1 week till the current time. 
+#### 🔹 Create OAuth 2.0 Client ID:
+1. Go to **API & Services** > **Credentials**.
+2. Click **Create Credentials** and select **OAuth 2.0 Client ID**.
+3. If prompted, configure the consent screen by providing the necessary application details.
+4. Choose **Desktop App** as the application type.
+5. Click **Create** and download the `credentials.json` file.
+6. Save the file in the base directory and rename it to `credentials.json`.
 
+---
 
+## 📦 Installing Dependencies
+
+Before running the application, ensure all required dependencies are installed by running:
+
+```sh
+pip install -r requirements.txt
+```
+
+---
+
+## 🔧 Running the Scripts
+
+The following scripts are required to set up and update credentials:
+
+- **01_create_id.py** – Initializes and creates OAuth credentials.
+- **02_google_auth.py** – Handles authentication and token generation.
+
+To fetch calendar data and save it as a CSV file in the directory, run:
+
+```sh
+python 03_google_cal_to_csv.py
+```
+
+This will retrieve events from the last 7 days up to the current time and store them in a CSV file.
+
+---
+
+## 🤖 Automating the Process
+
+### 🖥️ For macOS Users
+
+To automate the script execution on macOS, **LaunchD** is used. Follow these steps:
+
+1. Retrieve your user ID by running:
+
+   ```sh
+   id -u
+   ```
+
+   This will return a number (e.g., `501` or `502`), referred to as `xxx` in the following commands.
+
+2. Load the LaunchD plist file:
+
+   ```sh
+   launchctl bootstrap gui/xxx scripts/com.google.cal2csv.plist
+   ```
+   
+   Alternatively, use the absolute path of the plist file.
+
+3. Start the scheduled task:
+
+   ```sh
+   launchctl kickstart gui/xxx/com.google.cal2csv
+   ```
+
+4. Verify the job status:
+
+   ```sh
+   launchctl list | grep com.google.cal2csv
+   ```
+
+   If successful, you should see output in three columns, indicating the job is running (e.g., `- 0 com.google.cal2csv`).
+
+### 🖥️ For Windows Users
+
+Cron jobs work fine on Windows. To schedule the script to run daily at 9 PM and store logs, open the crontab on your terminal and add the following line:
+
+```sh
+0 21 * * * python /path/to/03_google_cal_to_csv.py >> /path/to/scripts/logs/out.log 2>> /path/to/scripts/logs/error.log
+```
+Replace /path/to/ with the absolute path to your script directory.
+
+### 📝 Debugging and Logs
+
+Log files are automatically created in a subfolder named `logs` within the `scripts` directory. Check these logs for any issues related to the automation process.
+
+---
+
+## 📜 License
+This project is licensed under the **MIT License**. See the `LICENSE` file for details.
+
+---
+
+## 🤝 Contributions
+Contributions are welcome! Feel free to submit a pull request or open an issue for any improvements or bug fixes.
+
+---
+
+## 📧 Contact
+For any queries or support, feel free to reach out via **GitHub Issues** or email.
 
