@@ -2,12 +2,15 @@
 
 ## Motivation 
 
-I track my daily activities on my Google calendar and keep it updated. I used to perform weekly analysis on this data manually, and suggest changes for time management/ optimization. I decided to automate this process. 
+I track my daily activities on my Google calendar and keep it updated. I used to perform weekly analysis on this data manually, and suggest changes for time management/ optimization. I decided to automate this process.  
 This project has 3 parts to it: 
 1. Data Collection - Collecting data and storing it locally (done)
 2. Analysis - Performing daily analysis and track key metrics over time 
 3. Suggestions - Using historical data, provides recommendations to optimize time management (in progress)
 
+
+## Dashboard template 
+![Dashboard template ](templates/Dashboard Template.png)
 ## 🚀 Prerequisites
 
 ### 1️⃣ Setting Up OAuth 2.0 Credentials
