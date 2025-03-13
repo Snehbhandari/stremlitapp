@@ -10,7 +10,7 @@ This project has 3 parts to it:
 
 
 ## Dashboard template 
-![Dashboard template ](templates/Dashboard Template.png)
+![Dashboard template ](./templates/Dashboard%20Template.png)
 ## 🚀 Prerequisites
 
 ### 1️⃣ Setting Up OAuth 2.0 Credentials
