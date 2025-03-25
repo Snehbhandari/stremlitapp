@@ -50,6 +50,18 @@ graph_colors_2 = {
     'Afternoon': 'purple',
     'Evening': 'darkblue',
     'Night': 'pink'
+} 
+color_map_g1 = { # hard coding the calendar names and the colors according to what I use. 
+    'Job Applications': '#cc4aac', 
+    'projects': '#ae9cce', 
+    'Study': '#a75aba',
+    'Interview/ Calls': '#00aa39', 
+    'Due': '#e7ba51', 
+    'Classes': '#bcc256',
+    'CS170 - PTL': '#d85675',
+    'Workout': '#7213c4', 
+    'Relax and enjoy': '#ccc900', 
+    'Data 101': '#d8be5e'
 }
 
 # reading data 
@@ -73,6 +85,7 @@ def filtered_data(timeline):
         updated_df['Date with Day'] = updated_df['Date'] + '<br> (' + updated_df['Day'] + ')'
         updated_df.drop(columns=['Start Date', 'Date', 'Day'], inplace=True) 
         updated_df.rename(columns={'Date with Day': 'Start Date'}, inplace=True) 
+        updated_df.sort_values(by='Start Date', inplace=True)
         return updated_df
 
     elif timeline == 'Monthly': 
@@ -160,8 +173,22 @@ for x in time_of_day_hours['Time of Day'].unique():
     if 'Evening' not in x:
         time_of_day_hours.loc[len(time_of_day_hours)] = ['Evening', 0]
     if 'Night' not in x:
-        time_of_day_hours.loc[len(time_of_day_hours)] = ['Night', 0]
-    
+        time_of_day_hours.loc[len(time_of_day_hours)] = ['Night', 0] 
+
+# graph 3
+# creating new category column 
+graph3_df = df 
+graph3_df['Category'] = graph3_df['Calendar Name'].apply(lambda x: 
+                                                         'Productive' if x in ['Job Applications', 'projects', 'Study', 'Interview/ Calls'] 
+                                                         else 'Personal' if x in ['Relax and enjoy', 'workout']
+                                                         else 'Work/ Classes' if x in ['CS170 - PTL', 'Data 101', 'Classes']
+                                                         else 'Misc' if x in ['Due']
+                                                         else 'Other') 
+# Group by 'Category' and sum the duration
+category_time = graph3_df.groupby('Category')['Duration'].sum()
+category_time_percentage = (category_time / category_time.sum()) * 100
+category_df = category_time_percentage.reset_index()
+category_df.columns = ['Category', 'Total Time'] 
 
 # layout 
 app.layout = html.Div([ 
@@ -319,7 +346,24 @@ app.layout = html.Div([
                                    style= {**template['big_container'], 'margin-right': spaces['margin'], }),
 
                 # Graph 3
-                html.Div("Graph 4", style= {**template['big_container']})
+                html.Div(dcc.Graph(
+                        id='pie-chart-metric-b',
+                        figure={
+                            'data': [
+                                go.Pie(
+                                    labels=category_df['Category'],
+                                    values=category_df['Total Time'],
+                                    hole=0.5,  # Optional: Makes it a donut chart 
+                                    marker=dict(colors=(graph_colors['c2'], graph_colors['c1'])),
+                                    domain={'x': [0, 1], 'y': [0, 1]}
+                                ),],
+                                'layout': go.Layout(
+                                    title={'text': "Time Spent by Category", 'x': 0.5, 'y': 0.95},  # Centered horizontally, near the top
+                                    margin=dict(l=10, r=10, t=30, b=5)  # Reducing margins to maximize space
+                            )
+                            },style = {"width": "68vh", "height": "32vh", 'color': 'black'}
+                        ), style= {**template['big_container']}
+                    )
                 ], style={'display': 'flex', 'height': height_div['big_container']}
             ),
 
@@ -344,8 +388,8 @@ def update_graph(selected_dropdown_timeline): # takes the value of input in call
     if selected_dropdown_timeline is None:
         selected_dropdown_timeline = 'Weekly'
     df_filtered = filtered_data(selected_dropdown_timeline) # function to filter data based on selected value 
-    print(df_filtered.head())
-    fig = px.bar(df_filtered, x='Start Date', y='Duration', color='Calendar Name') 
+    # print(df_filtered.head())
+    fig = px.bar(df_filtered, x='Start Date', y='Duration', color='Calendar Name', color_discrete_map=color_map_g1) 
     fig.update_layout(
         title=f"Duration Worked",
         margin={'t': 25, 'b': 0, 'l': 0, 'r': 0},  # Adjust the margins as needed 
