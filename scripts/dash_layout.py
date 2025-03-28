@@ -394,7 +394,8 @@ def update_graph(selected_dropdown_timeline): # takes the value of input in call
     fig_time_of_day = px.bar(time_of_day_hours, x='Time of Day', y='Duration', 
                          title=f"Worked Hours by Time of Day {selected_dropdown_timeline}", 
                          labels={'Duration': 'Total Worked Hours (in hours)', 'Time of Day': 'Time of Day'},
-                         color='Time of Day', color_continuous_scale="pinkyl")
+                         color='Time of Day', color_continuous_scale="pinkyl", 
+                         category_orders={'Time of Day': ['Morning', 'Afternoon', 'Evening', 'Night']}, ) 
     fig_time_of_day.update_layout(margin={'t': 25, 'b': 0, 'l': 0, 'r': 0}, showlegend = False)  # Adjust the margins as needed
 
     # graph 3 
