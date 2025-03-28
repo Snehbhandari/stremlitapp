@@ -123,13 +123,13 @@ total_actual_hours_worked = piechart_df['Duration'].sum() / 60  # Duration in mi
 remaining_hours = possible_hours_in_week - total_actual_hours_worked 
 # Create the pie chart data 
 pie_data = {
-    'Category': ['Worked Hours', 'Potential Remaining hours'],
+    'Category': ['Worked Hours', 'Potential hours'],
     'Hours': [total_actual_hours_worked, remaining_hours]
 } 
 pie_df = pd.DataFrame(pie_data) 
 
 # Metric C - Average hours worked per day 
-metric_c_df = df
+metric_c_df = df.copy()
 metric_c_df['Start Date'] = pd.to_datetime(metric_c_df['Start Date'])
 # Calculate total hours worked (assuming 'Duration' is in minutes, divide by 60 to get hours)
 metric_c_df['Worked Hours'] = metric_c_df['Duration'] / 60
@@ -151,15 +151,15 @@ def categorize_time_of_day(row):
     start_hour = row.hour
     if start_hour >= 6 and start_hour < 11:
         return 'Morning'
-    elif start_hour >= 11 and start_hour < 4:
+    elif start_hour >= 11 and start_hour < 16:
         return 'Afternoon'
-    elif start_hour >= 4 and start_hour < 21:
+    elif start_hour >= 16 and start_hour < 21:
         return 'Evening' 
     else:
         return 'Night' 
 
 # Add a column for Time of Day based on the Start Time 
-graph2_df = df
+graph2_df = df.copy()
 graph2_df['Start Time'] = pd.to_datetime(graph2_df['Start Time'])
 graph2_df['Time of Day'] = graph2_df['Start Time'].apply(categorize_time_of_day)
 # Group by 'Time of Day' and sum the 'Duration' (which represents worked hours)
@@ -175,20 +175,17 @@ for x in time_of_day_hours['Time of Day'].unique():
     if 'Night' not in x:
         time_of_day_hours.loc[len(time_of_day_hours)] = ['Night', 0] 
 
-# graph 3
-# creating new category column 
-graph3_df = df 
+# graph 3 
+# Create a 'Category' column in the original dataframe based on your logic
+graph3_df = df.copy() 
+# Create a 'Category' column in the original dataframe based on your logic
 graph3_df['Category'] = graph3_df['Calendar Name'].apply(lambda x: 
                                                          'Productive' if x in ['Job Applications', 'projects', 'Study', 'Interview/ Calls'] 
                                                          else 'Personal' if x in ['Relax and enjoy', 'workout']
                                                          else 'Work/ Classes' if x in ['CS170 - PTL', 'Data 101', 'Classes']
                                                          else 'Misc' if x in ['Due']
                                                          else 'Other') 
-# Group by 'Category' and sum the duration
-category_time = graph3_df.groupby('Category')['Duration'].sum()
-category_time_percentage = (category_time / category_time.sum()) * 100
-category_df = category_time_percentage.reset_index()
-category_df.columns = ['Category', 'Total Time'] 
+
 
 # layout 
 app.layout = html.Div([ 
@@ -283,15 +280,16 @@ app.layout = html.Div([
                                     'font': {
                                         'size': 14,  # Adjust title font size
                                         'color': 'black',  # Adjust title font color
+                                        'automargin': True,
                                     }
                                 },
                                 'showlegend': False, 
                                 'height': 180, 
                                 # 'width': '5vh',
-                                'margin': {'t':35, 'b': 0, 'l': 0, 'r': 0},  # Custom margin values to reduce padding
+                                'margin': {'t':34, 'b': 0, 'l': 0, 'r': 0},  # Custom margin values to reduce padding
                                 # 'autosize': True,
                                 'backgroundColor': colors['sidebar'],
-                                'border': '1px black',
+                                'border': '1px black', 
                             }
                         }
                     ),
@@ -347,25 +345,12 @@ app.layout = html.Div([
 
                 # Graph 3
                 html.Div(dcc.Graph(
-                        id='pie-chart-metric-b',
-                        figure={
-                            'data': [
-                                go.Pie(
-                                    labels=category_df['Category'],
-                                    values=category_df['Total Time'],
-                                    hole=0.5,  # Optional: Makes it a donut chart 
-                                    marker=dict(colors=(graph_colors['c2'], graph_colors['c1'])),
-                                    domain={'x': [0, 1], 'y': [0, 1]}
-                                ),],
-                                'layout': go.Layout(
-                                    title={'text': "Time Spent by Category", 'x': 0.5, 'y': 0.95},  # Centered horizontally, near the top
-                                    margin=dict(l=10, r=10, t=30, b=5)  # Reducing margins to maximize space
-                            )
-                            },style = {"width": "68vh", "height": "32vh", 'color': 'black'}
-                        ), style= {**template['big_container']}
-                    )
-                ], style={'display': 'flex', 'height': height_div['big_container']}
-            ),
+                        id='graph-3',
+                            style = {"width": "68vh", "height": "32vh", 'color': 'black'}
+                            ), style= {**template['big_container']})
+                ], 
+                style={'display': 'flex', 'height': height_div['big_container']}
+                ),
 
         ], style={'flex': '70%', 'backgroundColor': colors['container_bg'], 'padding': spaces['padding']})
 
@@ -373,7 +358,7 @@ app.layout = html.Div([
 ], style={'backgroundColor': colors['full_background'], 'padding': spaces['padding'], 'margin-top': '0px'})
 
 # defining callbacks 
-@app.callback( 
+@app.callback( # outputs will be entered in this sequence 
     [Output('graph-1', 'figure'), 
     Output('varying-title', 'children'), 
     Output('metric2-title', 'children'), 
@@ -381,17 +366,17 @@ app.layout = html.Div([
     Output('metric3', 'children'), 
     Output('metric4-title', 'children'), 
     Output('metric4', 'children'), 
-    Output("graph-2", 'figure')], 
+    Output("graph-2", 'figure'), 
+    Output("graph-3", 'figure')], 
      Input('dropdown-timeline', 'value') 
 ) 
 def update_graph(selected_dropdown_timeline): # takes the value of input in callback 
     if selected_dropdown_timeline is None:
         selected_dropdown_timeline = 'Weekly'
     df_filtered = filtered_data(selected_dropdown_timeline) # function to filter data based on selected value 
-    # print(df_filtered.head())
     fig = px.bar(df_filtered, x='Start Date', y='Duration', color='Calendar Name', color_discrete_map=color_map_g1) 
     fig.update_layout(
-        title=f"Duration Worked",
+        title=f"Duration Worked", 
         margin={'t': 25, 'b': 0, 'l': 0, 'r': 0},  # Adjust the margins as needed 
     )
     title = f"Summary of {selected_dropdown_timeline.capitalize()} Events"
@@ -409,10 +394,17 @@ def update_graph(selected_dropdown_timeline): # takes the value of input in call
     fig_time_of_day = px.bar(time_of_day_hours, x='Time of Day', y='Duration', 
                          title=f"Worked Hours by Time of Day {selected_dropdown_timeline}", 
                          labels={'Duration': 'Total Worked Hours (in hours)', 'Time of Day': 'Time of Day'},
-                         color='Time of Day', color_discrete_map=(graph_colors_2))
+                         color='Time of Day', color_continuous_scale="pinkyl")
     fig_time_of_day.update_layout(margin={'t': 25, 'b': 0, 'l': 0, 'r': 0}, showlegend = False)  # Adjust the margins as needed
+
+    # graph 3 
+    figure3 = px.sunburst(data_frame=graph3_df, path=['Category', 'Calendar Name'], values = 'Duration', color = 'Duration', color_continuous_scale='pinkyl') 
+    figure3.update_layout(
+        title={'text': "Sunburst Chart: Time Spent by in each category", 'x': 0.5, 'xanchor': 'center'},  # Center the title 
+        margin={'t': 25, 'b': 0, 'l': 0, 'r': 0}
+    )
     
-    return fig, title, metric2, metric3_title, metric3, metric4_title, metric4, fig_time_of_day
+    return fig, title, metric2, metric3_title, metric3, metric4_title, metric4, fig_time_of_day, figure3
 
 if __name__ == '__main__': 
     app.run_server(debug=True) 
